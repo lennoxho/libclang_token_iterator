@@ -2,6 +2,26 @@
 #include <clang-c/Index.h>
 #include <gsl/gsl>
 
+// clang_getTokenLocation() will sometimes return
+// a CXSourceLocation that points to the middle of the entity.
+// Use the start/end positions of clang_getTokenExtent() instead because they are better behaved.
+class cursor_location {
+    CXSourceLocation m_loc;
+
+public:
+    static constexpr int begin = 0;
+    static constexpr int end = 1;
+
+    cursor_location(const CXCursor &cursor, int pos = begin) {
+        auto extent = clang_getCursorExtent(cursor);
+        m_loc = (pos == begin) ? clang_getRangeStart(extent) : clang_getRangeEnd(extent);
+    }
+
+    const CXSourceLocation &get() const noexcept {
+        return m_loc;
+    }
+};
+
 class token_iterator {
     struct token_deleter {
         CXTranslationUnit tu;
