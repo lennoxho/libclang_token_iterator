@@ -9,12 +9,11 @@ class cursor_location {
     CXSourceLocation m_loc;
 
 public:
-    static constexpr int begin = 0;
-    static constexpr int end = 1;
+    enum pos { begin, end };
 
-    cursor_location(const CXCursor &cursor, int pos = begin) {
+    cursor_location(const CXCursor &cursor, pos p = begin) {
         auto extent = clang_getCursorExtent(cursor);
-        m_loc = (pos == begin) ? clang_getRangeStart(extent) : clang_getRangeEnd(extent);
+        m_loc = (p == begin) ? clang_getRangeStart(extent) : clang_getRangeEnd(extent);
     }
 
     const CXSourceLocation &get() const noexcept {
