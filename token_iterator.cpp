@@ -74,8 +74,8 @@ public:
     // The end sentinel
     token_iterator() = default;
 
-    token_iterator(CXTranslationUnit tu, const cursor_location &loc) 
-    :m_tok{ clang_getToken(tu, loc.get()), tu }
+    token_iterator(gsl::not_null<CXTranslationUnit> tu, const cursor_location &loc) 
+    :m_tok{ clang_getToken(tu, loc.get()), tu.get() }
     {}
 
     token_iterator(token_iterator &&other) noexcept
