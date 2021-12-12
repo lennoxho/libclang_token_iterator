@@ -74,7 +74,7 @@ public:
     // The end sentinel
     token_iterator() = default;
 
-    token_iterator(CXTranslationUnit tu, const CURSOR_LOCATION &loc) 
+    token_iterator(CXTranslationUnit tu, const cursor_location &loc) 
     :m_tok{ clang_getToken(tu, loc.get()), tu }
     {}
 
